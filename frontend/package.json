@@ -10,9 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@auth0/auth0-react": "^2.3.0",
     "@clerk/clerk-react": "^5.25.6",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
+    "firebase": "^11.6.0",
     "humanize-duration": "^3.32.1",
     "quill": "^2.0.3",
     "rc-progress": "^4.0.0",

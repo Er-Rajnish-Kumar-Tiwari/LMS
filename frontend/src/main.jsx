@@ -1,27 +1,23 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.jsx'
-import { BrowserRouter } from 'react-router-dom'
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './App.jsx';
+import { BrowserRouter } from 'react-router-dom';
+import './index.css';
+import { Auth0Provider } from '@auth0/auth0-react';
 import { AppContextProvider } from './Context/AppContext.jsx';
-import { ClerkProvider } from '@clerk/clerk-react'
 
-// Import your Publishable Key
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const root = createRoot(document.getElementById('root'));
 
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key")
-}
-
-createRoot(document.getElementById('root')).render(
-
+root.render(
   <BrowserRouter>
-    <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
-
+    <Auth0Provider
+      domain={import.meta.env.VITE_AUTH0_DOMAIN}
+      clientId={import.meta.env.VITE_AUTH0_CLIENT_ID}
+      authorizationParams={{ redirect_uri: window.location.origin }}
+    >
       <AppContextProvider>
         <App />
       </AppContextProvider>
-
-    </ClerkProvider>
+    </Auth0Provider>
   </BrowserRouter>
-
 );
