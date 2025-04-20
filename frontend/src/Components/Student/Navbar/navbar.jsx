@@ -1,16 +1,19 @@
 import React, { useContext } from 'react';
 import { assets } from '../../../assets/assets';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
 import { AppContext } from '../../../Context/AppContext';
+import { toast } from 'react-toastify';
 
-const Navbar = () => {
-  const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
+const Navbar = ({setShowLogin}) => {
   const navigate = useNavigate();
-  const {isEducator, setIsEducator } = useContext(AppContext);
+  const { isEducator, setIsEducator, token, setToken} = useContext(AppContext);
+
+  const isAuthenticated = !!token;
 
   const handleLogout = () => {
-    logout({ returnTo: window.location.origin });
+    setToken('');
+    toast.success('Logged out successfully!');
+    navigate('/');
   };
 
   return (
@@ -22,17 +25,17 @@ const Navbar = () => {
         onClick={() => navigate('/')}
       />
 
+      {/* Desktop Nav */}
       <div className="hidden md:flex items-center gap-5 text-gray-500">
-        <div className="flex items-center gap-5">
-          {isAuthenticated && (
-            <>
-              <button onClick={() => navigate('/educator')}>
-                {isEducator ? 'Educator Dashboard' : 'Become Educator'}
-              </button>
-              | <Link to="/my-enrollment">My Enrollments</Link>
-            </>
-          )}
-        </div>
+        {isAuthenticated && (
+          <>
+            <button onClick={() => navigate('/educator')}>
+              {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+            </button>
+            |
+            <Link to="/my-enrollment">My Enrollments</Link>
+          </>
+        )}
 
         {isAuthenticated ? (
           <button onClick={handleLogout} className="text-red-500">
@@ -40,7 +43,7 @@ const Navbar = () => {
           </button>
         ) : (
           <button
-            onClick={() => loginWithRedirect()}
+            onClick={() => setShowLogin(true)}
             className="bg-blue-600 text-white px-5 py-2 rounded-full"
           >
             Create Account
@@ -48,24 +51,24 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Mobile View */}
-      <div className="md:hidden flex items-center gap-2 sm:gap-5 text-white-500">
-        <div className="flex items-center gap-1 sm:gap-2 max-sm:text-xs">
-          {isAuthenticated && (
-            <>
-              <button onClick={() => navigate('/educator')}>
-                {isEducator ? 'Educator Dashboard' : 'Become Educator'}
-              </button>
-              | <Link to="/my-enrollment">My Enrollments</Link>
-            </>
-          )}
-        </div>
+      {/* Mobile Nav */}
+      <div className="md:hidden flex items-center gap-2 sm:gap-5 text-gray-500">
+        {isAuthenticated && (
+          <>
+            <button onClick={() => navigate('/educator')}>
+              {isEducator ? 'Educator Dashboard' : 'Become Educator'}
+            </button>
+            |
+            <Link to="/my-enrollment">My Enrollments</Link>
+          </>
+        )}
+
         {isAuthenticated ? (
           <button onClick={handleLogout}>
             <img src={assets.user_icon} alt="Logout" />
           </button>
         ) : (
-          <button onClick={() => loginWithRedirect()}>
+          <button onClick={() => setShowLogin(true)}>
             <img src={assets.user_icon} alt="Login" />
           </button>
         )}

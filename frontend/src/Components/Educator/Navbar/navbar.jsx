@@ -1,14 +1,19 @@
-import React from 'react';
-import { assets, dummyEducatorData } from '../../../assets/assets';
+import React, { useContext } from 'react';
+import { assets } from '../../../assets/assets';
 import { useNavigate } from 'react-router-dom';
-import { useAuth0 } from '@auth0/auth0-react';
+import { AppContext } from '../../../Context/AppContext';
+import { toast } from 'react-toastify';
 
-const Navbar = () => {
-  const { user, loginWithRedirect, logout, isAuthenticated } = useAuth0();
+const Navbar = ({setShowLogin}) => {
   const navigate = useNavigate();
+  const { token, setToken} = useContext(AppContext);
+
+  const isAuthenticated = !!token;
 
   const handleLogout = () => {
-    logout({ returnTo: window.location.origin });
+    setToken('');
+    toast.success('Logged out successfully!');
+    navigate('/');
   };
 
   return (
@@ -22,7 +27,7 @@ const Navbar = () => {
 
       <div className='flex gap-2 items-center'>
         <p className='text-base'>
-          Hi! {isAuthenticated ? user?.name || user?.email : 'Developer'}
+          Hi! {isAuthenticated ? 'Educator' : 'Developer'}
         </p>
         {isAuthenticated ? (
           <button
@@ -35,7 +40,7 @@ const Navbar = () => {
           <img
             src={assets.profile_img}
             alt="Profile"
-            onClick={() => loginWithRedirect()}
+            onClick={() => setShowLogin(true)}
             className="cursor-pointer w-8 h-8"
           />
         )}

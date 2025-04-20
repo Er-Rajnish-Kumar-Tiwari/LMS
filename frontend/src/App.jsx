@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Route, Routes, useMatch } from 'react-router-dom'
 import Home from './Pages/Student/Home/home'
 import CourseList from './Pages/Student/CourseList/courseList'
@@ -12,16 +12,24 @@ import AddCourse from './Pages/Educator/AddCourse/addCourse'
 import MyCourse from './Pages/Educator/MyCourse/myCourse'
 import StudentEnrolled from './Pages/Educator/StudentEnrolled/studentEnrolled'
 import Navbar from './Components/Student/Navbar/navbar'
+import Navbarb from './Components/Educator/Navbar/navbar'
 import "quill/dist/quill.snow.css";
+import Login from './Components/Student/Login/login'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
 
+  const [showLogin,setShowLogin]=useState(false);
   const isEducator=useMatch("/educator/*");
 
   return (
     <div className='text-default min-h-screen bg-white'>
       
-      {!isEducator && <Navbar/>}
+      {showLogin ? <Login setShowLogin={setShowLogin}/> : <></>}
+      {!isEducator && <Navbar setShowLogin={setShowLogin} />}
+      {isEducator &&<Navbarb setShowLogin={setShowLogin}/>}
+      <ToastContainer/>
 
       <Routes>
 

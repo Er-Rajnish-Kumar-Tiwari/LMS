@@ -10,6 +10,7 @@ const AppContextProvider=(props)=>{
     const [isEducator,setIsEducator]=useState(true);
     const [input,setInput]=useState("");
     const [enrolledCourse,setEnrolledCourse]=useState([]);
+    const [token, setToken] = useState("");
 
     const fetchCourse=async()=>{
          setAllCourse(dummyCourses);
@@ -64,7 +65,7 @@ const AppContextProvider=(props)=>{
     },[]);
 
     const value={
-        allCourse,calculateTotalRating,isEducator,setIsEducator,input,setInput,calculateNOL,calculateLectureTime,calculateCourseTime,enrolledCourse,setEnrolledCourse,fetchEnrolledCourse
+        allCourse,calculateTotalRating,isEducator,setIsEducator,input,setInput,calculateNOL,calculateLectureTime,calculateCourseTime,enrolledCourse,setEnrolledCourse,fetchEnrolledCourse,token, setToken
     };
 
     return(
