@@ -26,7 +26,53 @@ const Login = ({ setShowLogin }) => {
         if (!email || !password) {
             toast.warning("Please fill all fields!");
             return;
-        }        
+        } 
+
+        const obj = { name, email, password };
+        let url = "";
+
+        if (currentState === 'Login') {
+            url = "https://lms-backend-sgs2.onrender.com/login";
+        } else {
+            url = "https://lms-backend-sgs2.onrender.com/register";
+        }
+
+        try {
+            const response = await axios.post(url, obj);
+
+            if (response.data && response.data.token) {
+                setData([...data, obj]); 
+                setToken(response.data.token);
+                localStorage.setItem("token", response.data.token);
+                toast.success("Successfully logged in!");
+                setShowLogin(false);  
+            } else {
+
+                if(response.data.Massage==="User does not exits"){
+                    toast.error("User does not exits. please sign up!");
+                }
+                
+                else if(response.data.Massage==="please enter strong password"){
+                    toast.error("Enter strong password!");
+                }
+
+                else if(response.data.Massage==="Invaild password"){
+                    toast.error("Invaild password. try again!");
+                }
+
+                else if(response.data.Massage==="This account already exits"){
+                    toast.error(" User already exits. please login!");
+                }
+                
+                else{
+                    toast.error("Login faild please try again!");
+                }
+
+
+            }
+        } catch (error) {
+            toast.error(`Error in API call: ${error.message}`);
+        }      
     };
 
 

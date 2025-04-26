@@ -28,7 +28,6 @@ const App = () => {
       
       {showLogin ? <Login setShowLogin={setShowLogin}/> : <></>}
       {!isEducator && <Navbar setShowLogin={setShowLogin} />}
-      {isEducator &&<Navbarb setShowLogin={setShowLogin}/>}
       <ToastContainer/>
 
       <Routes>

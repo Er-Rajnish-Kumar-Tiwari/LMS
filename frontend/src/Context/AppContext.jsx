@@ -68,6 +68,18 @@ const AppContextProvider=(props)=>{
         allCourse,calculateTotalRating,isEducator,setIsEducator,input,setInput,calculateNOL,calculateLectureTime,calculateCourseTime,enrolledCourse,setEnrolledCourse,fetchEnrolledCourse,token, setToken
     };
 
+    // Does not log out when usen refresh web-page
+    useEffect(()=>{
+        const loadData=async()=>{
+            const savedToken=localStorage.getItem("token");
+            if(savedToken){
+                console.log(savedToken);
+                setToken(savedToken);
+            }
+        };
+        loadData();
+    },[]);
+
     return(
         <AppContext.Provider value={value}>
             {props.children}

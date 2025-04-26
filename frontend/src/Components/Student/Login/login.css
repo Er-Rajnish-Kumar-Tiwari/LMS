@@ -61,7 +61,7 @@
 .login-container button{
     border: none;
     color: white;
-    background-color: tomato;
+    background-color: steelblue;
     border-radius: 4px;
     cursor: pointer;
     font-size: 15px;
@@ -73,7 +73,7 @@
 }
 
 .login p span{
-    color: tomato;
+    color: steelblue;
     font-weight: 500;
     cursor: pointer;
 }

@@ -38,7 +38,7 @@ const Navbar = ({setShowLogin}) => {
         )}
 
         {isAuthenticated ? (
-          <button onClick={handleLogout} className="text-red-500">
+          <button onClick={handleLogout} className="text-red-500 bg-gray-200 px-3 py-1 rounded">
             Logout
           </button>
         ) : (
@@ -64,8 +64,8 @@ const Navbar = ({setShowLogin}) => {
         )}
 
         {isAuthenticated ? (
-          <button onClick={handleLogout}>
-            <img src={assets.user_icon} alt="Logout" />
+          <button onClick={handleLogout}  className="text-red-500 bg-gray-200 px-1 py-1 rounded">
+             Logout
           </button>
         ) : (
           <button onClick={() => setShowLogin(true)}>

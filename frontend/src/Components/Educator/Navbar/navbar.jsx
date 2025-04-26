@@ -32,7 +32,7 @@ const Navbar = ({setShowLogin}) => {
         {isAuthenticated ? (
           <button
             onClick={handleLogout}
-            className="text-red-500 text-sm underline"
+            className="text-red-500 bg-gray-200 px-3 py-1 rounded"
           >
             Logout
           </button>
