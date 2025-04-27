@@ -44,6 +44,7 @@ const Login = ({ setShowLogin }) => {
                 setData([...data, obj]); 
                 setToken(response.data.token);
                 localStorage.setItem("token", response.data.token);
+                
                 toast.success("Successfully logged in!");
                 setShowLogin(false);  
             } else {

@@ -34,7 +34,7 @@ const Players = () => {
 
   return (
     <>
-      <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 px-10 lg:px-36 '>
+      <div className='p-4 sm:p-10 flex flex-col-reverse md:grid md:grid-cols-2 gap-10 px-10 lg:px-36'>
 
         {/* Left part - Course Structure */}
         <div>

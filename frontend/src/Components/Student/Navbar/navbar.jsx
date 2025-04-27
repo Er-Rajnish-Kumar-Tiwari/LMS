@@ -29,11 +29,7 @@ const Navbar = ({setShowLogin}) => {
       <div className="hidden md:flex items-center gap-5 text-gray-500">
         {isAuthenticated && (
           <>
-            <button onClick={() => navigate('/educator')}>
-              {isEducator ? 'Educator Dashboard' : 'Become Educator'}
-            </button>
-            |
-            <Link to="/my-enrollment">My Enrollments</Link>
+            <Link to="/my-enrollment" className='text-base'>My Enrollments</Link>
           </>
         )}
 
@@ -52,14 +48,10 @@ const Navbar = ({setShowLogin}) => {
       </div>
 
       {/* Mobile Nav */}
-      <div className="md:hidden flex items-center gap-2 sm:gap-5 text-gray-500">
+      <div className="md:hidden flex items-center gap-5 sm:gap-5 text-gray-500">
         {isAuthenticated && (
           <>
-            <button onClick={() => navigate('/educator')}>
-              {isEducator ? 'Educator Dashboard' : 'Become Educator'}
-            </button>
-            |
-            <Link to="/my-enrollment">My Enrollments</Link>
+            <Link to="/my-enrollment" className='text-base'>My Enrollments</Link>
           </>
         )}
 

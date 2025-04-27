@@ -6,13 +6,7 @@ import CourseDetails from './Pages/Student/CourseDetails/courseDetails'
 import MyEnrollments from './Pages/Student/MyEnrollments/myEnrollments'
 import Players from './Pages/Student/Players/players'
 import Loading from './Components/Student/Loading/loading'
-import EducatorInfo from './Pages/Educator/EducatorInfo/educatorInfo'
-import Dashboard from './Pages/Educator/Dashboard/dashboard'
-import AddCourse from './Pages/Educator/AddCourse/addCourse'
-import MyCourse from './Pages/Educator/MyCourse/myCourse'
-import StudentEnrolled from './Pages/Educator/StudentEnrolled/studentEnrolled'
 import Navbar from './Components/Student/Navbar/navbar'
-import Navbarb from './Components/Educator/Navbar/navbar'
 import "quill/dist/quill.snow.css";
 import Login from './Components/Student/Login/login'
 import { ToastContainer } from 'react-toastify'
@@ -39,15 +33,6 @@ const App = () => {
         <Route path='/my-enrollment' element={<MyEnrollments />} />
         <Route path='/players/:courseId' element={<Players />} />
         <Route path='/loading/:path' element={<Loading />} />
-
-        <Route path='/educator' element={<EducatorInfo />}>
-
-          <Route path='dashboard' element={<Dashboard />} />
-          <Route path='add-course' element={<AddCourse />} />
-          <Route path='my-course' element={<MyCourse />} />
-          <Route path='student-enrolled' element={<StudentEnrolled />} />
-
-        </Route>
 
       </Routes>
     </div>
