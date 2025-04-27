@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../../Context/AppContext'
 import { useNavigate } from 'react-router-dom';
 import {Line} from "rc-progress";
@@ -9,6 +9,7 @@ const MyEnrollments = () => {
   const {enrolledCourse,calculateCourseTime}=useContext(AppContext);
   const navigate=useNavigate();
 
+  
   const [progressArray,setProgressArray]=useState([
     {lectureComplete:2,totalLectures:4},
     {lectureComplete:1,totalLectures:4},
@@ -54,7 +55,7 @@ const MyEnrollments = () => {
           </thead>
 
           <tbody className='text-gray-800'>
-            {enrolledCourse.map((course,index)=>{
+            {enrolledCourse && enrolledCourse.map((course,index)=>{
               return(
                 <tr key={index} className='border-b border-gray-600/20'>
 

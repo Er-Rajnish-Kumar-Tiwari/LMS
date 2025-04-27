@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { dummyCourses } from "../assets/assets";
 import humanizeDuration from "humanize-duration";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const AppContext=createContext();
 
@@ -13,7 +15,19 @@ const AppContextProvider=(props)=>{
     const [token, setToken] = useState("");
 
     const fetchCourse=async()=>{
-         setAllCourse(dummyCourses);
+         try {
+            const response=await axios.get("http://localhost:2000/getCourse");
+            if(response){
+                setAllCourse(response.data.courses);
+            }
+
+            else{
+                toast.error(response.Massage);
+            }
+        }
+        catch (error) {
+            toast.error(error.Message);
+        }
     };
 
     const calculateTotalRating=(course)=>{
@@ -55,14 +69,42 @@ const AppContextProvider=(props)=>{
         return totalLectures;
     };
 
-    const fetchEnrolledCourse=async()=>{
-        setEnrolledCourse(dummyCourses);
-    };
-
-    useEffect(()=>{
+    const fetchEnrolledCourse = async () => {
+        try {
+          const tokens = localStorage.getItem("token");
+      
+          const response = await axios.post(
+            "http://localhost:2000/enrolled-data",
+            {},
+            { headers: { token: tokens } }
+          );
+      
+          console.log(tokens);
+      
+          if (response && response.data) {
+            setEnrolledCourse(response.data.enrolledCourses);
+            console.log(response.data);
+          } else {
+            toast.error(response.data?.Message || "Failed to fetch enrolled courses");
+          }
+      
+        } catch (error) {
+          toast.error(error.message || "Something went wrong");
+        }
+      };
+      
+      // This is fine
+      useEffect(() => {
         fetchCourse();
-        fetchEnrolledCourse();
-    },[]);
+      }, []);
+      
+      // Minor improvement in tokens checking
+      useEffect(() => {
+        const tokens = localStorage.getItem("token");
+        if (tokens) {
+          fetchEnrolledCourse();
+        }
+      }, [token]);
 
     const value={
         allCourse,calculateTotalRating,isEducator,setIsEducator,input,setInput,calculateNOL,calculateLectureTime,calculateCourseTime,enrolledCourse,setEnrolledCourse,fetchEnrolledCourse,token, setToken
@@ -73,7 +115,6 @@ const AppContextProvider=(props)=>{
         const loadData=async()=>{
             const savedToken=localStorage.getItem("token");
             if(savedToken){
-                console.log(savedToken);
                 setToken(savedToken);
             }
         };
