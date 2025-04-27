@@ -30,7 +30,7 @@ const userData = async (req, res) => {
 
 const enrolledCourses = async (req, res) => {
     try {
-        const user = await userModel.findById({userId:req.body.userId});
+        const user = await userModel.findById(req.body.userId);
         if (!user) {
             return res.status(404).json({
                 Status: "404",
