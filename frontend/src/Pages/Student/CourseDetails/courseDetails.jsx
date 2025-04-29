@@ -6,6 +6,8 @@ import { assets } from '../../../assets/assets';
 import humanizeDuration from 'humanize-duration';
 import Footer from '../../../Components/Student/Footer/footer';
 import YouTube from 'react-youtube';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const CourseDetails = () => {
   const { id } = useParams();
@@ -15,7 +17,8 @@ const CourseDetails = () => {
     calculateNOL,
     calculateLectureTime,
     calculateCourseTime,
-    enrolledStudents
+    enrolledStudents,
+    token
   } = useContext(AppContext);
 
   const [courseData, setCourseData] = useState(null);
@@ -23,8 +26,47 @@ const CourseDetails = () => {
   const [playVideo, setPlayVideo] = useState(null);
 
   const fetchCourse = async () => {
-    const findCourse = allCourse.find(course => course._id === id);
-    setCourseData(findCourse);
+    const response=await axios.get("https://lms-backend-sgs2.onrender.com/getCourseById/"+id);
+    setCourseData(response.data.courseData);
+  };
+
+  const enrollCourse = async () => {
+    try {
+      const token = localStorage.getItem("token");
+  
+      if (!token) {
+        toast.warning("Please login to enroll in the course.");
+        return;
+      }
+  
+      const enrollResponse = await axios.post(
+        "https://lms-backend-sgs2.onrender.com/payment",
+        { courseId: id },
+        {
+          headers: {
+            token: token,
+          },
+        }
+      );
+  
+      console.log(enrollResponse);
+  
+      if (enrollResponse.data.Status === "200") {
+        toast.success("Enrollment successful! Payment started.");
+      }
+      
+      else if (enrollResponse.data.Status === "500" && enrollResponse.data.Massage === "already enrolled") {
+        toast.info("You are already enrolled in this course.");
+      } 
+      
+      else{
+        toast.error(enrollResponse.data.Message || "Enrollment failed.");
+      }
+  
+    } catch (error) {
+      console.log(error.response);
+      toast.error(error.response?.data?.Message || "Something went wrong during enrollment.");
+    }
   };
 
   useEffect(() => {
@@ -208,7 +250,7 @@ const CourseDetails = () => {
             </div>
 
             <div className='mt-3'>
-              <button className='bg-blue-600 text-white w-full md:px-10 px-7 py-2 rounded-md text-base'>Enroll Now</button>
+              <button className='bg-blue-600 text-white w-full md:px-10 px-7 py-2 rounded-md text-base' onClick={enrollCourse}>Enroll Now</button>
             </div>
 
             <div className='mt-5'>

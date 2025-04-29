@@ -16,7 +16,7 @@ const AppContextProvider=(props)=>{
 
     const fetchCourse=async()=>{
          try {
-            const response=await axios.get("http://localhost:2000/getCourse");
+            const response=await axios.get("https://lms-backend-sgs2.onrender.com/getCourse");
             if(response){
                 setAllCourse(response.data.courses);
             }
@@ -41,7 +41,7 @@ const AppContextProvider=(props)=>{
             totalRating += rating.rating
         });
 
-        return totalRating/course.courseRatings.length;
+        return Math.floor(totalRating/course.courseRatings.length);
     };
 
     const calculateLectureTime=(chapter)=>{
@@ -68,43 +68,37 @@ const AppContextProvider=(props)=>{
         })
         return totalLectures;
     };
-
     const fetchEnrolledCourse = async () => {
         try {
-          const tokens = localStorage.getItem("token");
-      
-          const response = await axios.post(
-            "http://localhost:2000/enrolled-data",
-            {},
-            { headers: { token: tokens } }
-          );
-      
-          console.log(tokens);
-      
-          if (response && response.data) {
-            setEnrolledCourse(response.data.enrolledCourses);
-            console.log(response.data);
-          } else {
-            toast.error(response.data?.Message || "Failed to fetch enrolled courses");
-          }
-      
+            const tokens = localStorage.getItem("token");
+    
+            const response = await axios.post(
+                "https://lms-backend-sgs2.onrender.com/enrolled-data",
+                {},
+                { headers: { token: tokens } }
+            );
+    
+            if (response && response.data) {
+                console.log(response.data.data[0].enrolledStudent[0]._id);
+                setEnrolledCourse(response.data.data);
+            } else {
+                toast.error(response.data?.Message || "Failed to fetch enrolled courses");
+            }
         } catch (error) {
-          toast.error(error.message || "Something went wrong");
+            toast.error(error.message || "Something went wrong");
         }
-      };
+    };
       
-      // This is fine
       useEffect(() => {
         fetchCourse();
       }, []);
-      
-      // Minor improvement in tokens checking
-      useEffect(() => {
-        const tokens = localStorage.getItem("token");
-        if (tokens) {
-          fetchEnrolledCourse();
+
+      useEffect(()=>{
+        if(token){
+        fetchEnrolledCourse();
         }
-      }, [token]);
+      },[token]);
+      
 
     const value={
         allCourse,calculateTotalRating,isEducator,setIsEducator,input,setInput,calculateNOL,calculateLectureTime,calculateCourseTime,enrolledCourse,setEnrolledCourse,fetchEnrolledCourse,token, setToken
