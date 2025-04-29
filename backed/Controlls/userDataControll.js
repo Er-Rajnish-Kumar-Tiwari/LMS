@@ -54,7 +54,8 @@ const enrolledCourses = async (req, res) => {
 
 const purchaseCourses = async (req, res) => {
   try {
-    const { userId, courseId } = req.body;
+    const { courseId } = req.body;
+    const userId=req.body.userId;
 
     const userData = await userModel.findById(userId);
     const courseData = await courseModel.findById(courseId);
@@ -69,6 +70,11 @@ const purchaseCourses = async (req, res) => {
     const alreadyEnrolled = userData.enrolledCourses.some(
       (c) => c._id.toString() === courseData._id.toString()
     );
+
+    if(alreadyEnrolled){
+      res.json({Status:"500",Massage:"already enrolled"});
+    }
+
     if (!alreadyEnrolled) {
       userData.enrolledCourses.push(courseData);
       await userData.save();
