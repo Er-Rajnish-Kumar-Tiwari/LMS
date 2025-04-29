@@ -3,7 +3,6 @@ import { AppContext } from '../../../Context/AppContext'
 import { useNavigate } from 'react-router-dom';
 import {Line} from "rc-progress";
 import Footer from '../../../Components/Student/Footer/footer';
-import axios from 'axios';
 
 const MyEnrollments = () => {
 
@@ -11,20 +10,32 @@ const MyEnrollments = () => {
   const navigate=useNavigate();
 
   
-  const [progressArray,setProgressArray]=useState([]);
-
-  const courseProgress=async()=>{
-
-    const token=localStorage.getItem("token");
-
-    const tempProgress=await Promise.all(
-      enrolledCourse.map(async(course)=>{
-
-        const response=await axios.post
-        
-      })
-    )
-  };
+  const [progressArray,setProgressArray]=useState([
+    {lectureComplete:2,totalLectures:4},
+    {lectureComplete:1,totalLectures:4},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:4,totalLectures:4},
+    {lectureComplete:4,totalLectures:5},
+    {lectureComplete:1,totalLectures:5},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:5,totalLectures:4},
+    {lectureComplete:2,totalLectures:4},
+    {lectureComplete:1,totalLectures:4},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:4,totalLectures:4},
+    {lectureComplete:4,totalLectures:5},
+    {lectureComplete:1,totalLectures:5},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:5,totalLectures:4},
+    {lectureComplete:2,totalLectures:4},
+    {lectureComplete:1,totalLectures:4},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:4,totalLectures:4},
+    {lectureComplete:4,totalLectures:5},
+    {lectureComplete:1,totalLectures:5},
+    {lectureComplete:3,totalLectures:4},
+    {lectureComplete:5,totalLectures:4},
+  ]);
 
   return (
     <>
