@@ -11,6 +11,7 @@ import "quill/dist/quill.snow.css";
 import Login from './Components/Student/Login/login'
 import { ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
+import Final from './Pages/Student/Final/final'
 
 const App = () => {
 
@@ -33,6 +34,7 @@ const App = () => {
         <Route path='/my-enrollment' element={<MyEnrollments />} />
         <Route path='/players/:courseId' element={<Players />} />
         <Route path='/loading/:path' element={<Loading />} />
+        <Route path='/final' element={<Final/>}/>
 
       </Routes>
     </div>

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { AppContext } from '../../../Context/AppContext';
 import Loading from '../../../Components/Student/Loading/loading';
 import { assets } from '../../../assets/assets';
@@ -24,6 +24,7 @@ const CourseDetails = () => {
   const [courseData, setCourseData] = useState(null);
   const [openSection, setOpenSection] = useState(false);
   const [playVideo, setPlayVideo] = useState(null);
+  const navigate=useNavigate();
 
   const fetchCourse = async () => {
     const response=await axios.get("https://lms-backend-sgs2.onrender.com/getCourseById/"+id);
@@ -39,9 +40,10 @@ const CourseDetails = () => {
         return;
       }
   
+      // Step 1: Request order creation from backend
       const enrollResponse = await axios.post(
         "https://lms-backend-sgs2.onrender.com/payment",
-        { courseId: id },
+        { courseId: id }, // Make sure `id` is available in your component
         {
           headers: {
             token: token,
@@ -49,26 +51,84 @@ const CourseDetails = () => {
         }
       );
   
-      console.log(enrollResponse);
+      const { Status, order, amount, purchaseId, Message } = enrollResponse.data;
   
-      if (enrollResponse.data.Status === "200") {
-        toast.success("Enrollment successful! Payment started.");
-      }
-      
-      else if (enrollResponse.data.Status === "500" && enrollResponse.data.Massage === "already enrolled") {
+      if (Status === "500" && Message === "already enrolled") {
         toast.info("You are already enrolled in this course.");
-      } 
-      
-      else{
-        toast.error(enrollResponse.data.Message || "Enrollment failed.");
+        return;
       }
+  
+      if (Status !== "200" || !order || !purchaseId) {
+        toast.error("Failed to initialize payment.");
+        return;
+      }
+  
+      // Step 2: Configure Razorpay
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY || "rzp_test_YourKeyHere", // fallback for testing
+        amount: order.amount,
+        currency: order.currency || "INR",
+        name: "Tanish Learning Center",
+        description: "Course Enrollment",
+        image: "https://example.com/logo.png", // optional
+        order_id: order.id,
+        handler: async function (response) {
+          // Step 3: Send payment confirmation to backend
+          try {
+            const validationResponse = await axios.post(
+              "https://lms-backend-sgs2.onrender.com/payment/validate",
+              {
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                purchaseId,
+              },
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+  
+            if (validationResponse.data.Status === "200") {
+              toast.success("Payment successful! You're enrolled.");
+              navigate("/final");
+            } else {
+              toast.error("Payment validation failed.");
+            }
+          } catch (error) {
+          }
+        },
+        prefill: {
+          name: "Student",
+          email: "tanish281202@gmail.com",
+          contact: "9572973654",
+        },
+        notes: {
+          courseId: id,
+          purchaseId,
+        },
+        theme: {
+          color: "#3399cc",
+        },
+      };
+  
+      // Step 4: Open Razorpay
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+      toast.success("Payment successful! You're enrolled.");
+      navigate("/final");
+  
+      rzp.on("payment.failed", function (response) {
+        toast.error("Payment failed. Try again.");
+        console.error("Razorpay payment failed:", response.error);
+      });
   
     } catch (error) {
-      console.log(error.response);
-      toast.error(error.response?.data?.Message || "Something went wrong during enrollment.");
     }
   };
 
+  
   useEffect(() => {
     fetchCourse();
   }, [allCourse]);
