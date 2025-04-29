@@ -7,9 +7,9 @@ const userDataRouter=express.Router();
 userDataRouter.post("/user-data",authMiddleware,userData);
 userDataRouter.post("/enrolled-data",authMiddleware,enrolledCourses);
 userDataRouter.post("/payment",authMiddleware,purchaseCourses);
-userDataRouter.post("/update-course-progress",updateCourseProgress);
-userDataRouter.post("/get-course-progress",getCourseProgress);
-userDataRouter.post("/add-ratings",addRatings);
+userDataRouter.post("/update-course-progress",authMiddleware,updateCourseProgress);
+userDataRouter.post("/get-course-progress",authMiddleware,getCourseProgress);
+userDataRouter.post("/add-ratings",authMiddleware,addRatings);
 userDataRouter.post("/validate",validate);
 
 module.exports=userDataRouter;
