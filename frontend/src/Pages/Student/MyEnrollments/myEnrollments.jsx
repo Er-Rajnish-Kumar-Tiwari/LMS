@@ -1,41 +1,60 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { AppContext } from '../../../Context/AppContext'
 import { useNavigate } from 'react-router-dom';
-import {Line} from "rc-progress";
+import { Line } from "rc-progress";
 import Footer from '../../../Components/Student/Footer/footer';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const MyEnrollments = () => {
 
-  const {enrolledCourse,calculateCourseTime,fetchEnrolledCourse,calculateNOL}=useContext(AppContext);
-  const navigate=useNavigate();
+  const { enrolledCourse, calculateCourseTime, fetchEnrolledCourse, calculateNOL } = useContext(AppContext);
+  const navigate = useNavigate();
+
+
+  const [progressArray, setProgressArray] = useState([]);
+
+  const courseProgress = async () => {
+
+    try {
+
+      const token = localStorage.getItem("token");
+
+      const tempProgress =await Promise.all(
+
+        enrolledCourse.map(async (course) => {
+          const response = await axios.post("https://lms-backend-sgs2.onrender.com/get-course-progress", { courseId: course._id }, { headers: { token: token } });
+
+          const totalLectures = calculateNOL(course);
+          const lectureComplete = response.data.progressData ? response.data.progressData.lectureCompleted.length : 0
+
+          return {lectureComplete,totalLectures};
+        })
+      )
+
+      setProgressArray(tempProgress);
+    }
+
+    catch (error) {
+      toast.error(error.Message);
+    }
+
+  };
+
+  const token=localStorage.getItem("token");
+  useEffect(()=>{
+    if(token){
+      courseProgress();
+    }
+  },[token]);
 
   
-  const [progressArray,setProgressArray]=useState([
-    {lectureComplete:2,totalLectures:4},
-    {lectureComplete:1,totalLectures:4},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:4,totalLectures:4},
-    {lectureComplete:4,totalLectures:5},
-    {lectureComplete:1,totalLectures:5},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:5,totalLectures:4},
-    {lectureComplete:2,totalLectures:4},
-    {lectureComplete:1,totalLectures:4},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:4,totalLectures:4},
-    {lectureComplete:4,totalLectures:5},
-    {lectureComplete:1,totalLectures:5},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:5,totalLectures:4},
-    {lectureComplete:2,totalLectures:4},
-    {lectureComplete:1,totalLectures:4},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:4,totalLectures:4},
-    {lectureComplete:4,totalLectures:5},
-    {lectureComplete:1,totalLectures:5},
-    {lectureComplete:3,totalLectures:4},
-    {lectureComplete:5,totalLectures:4},
-  ]);
+  useEffect(()=>{
+    if(enrolledCourse.length>0){
+      courseProgress();
+    }
+  },[enrolledCourse]);
+
 
   return (
     <>
@@ -55,17 +74,17 @@ const MyEnrollments = () => {
           </thead>
 
           <tbody className='text-gray-800'>
-            {enrolledCourse && enrolledCourse.map((course,index)=>{
-              return(
+            {enrolledCourse && enrolledCourse.map((course, index) => {
+              return (
                 <tr key={index} className='border-b border-gray-600/20'>
 
                   <td className='md:px-4 pl-2 md:pl-4 py-3 flex items-center space-x-3'>
-                    <img src={course.courseThumbnail} alt="image" className='w-14 sm:w-24 md:w-28 rounded'/>
+                    <img src={course.courseThumbnail} alt="image" className='w-14 sm:w-24 md:w-28 rounded' />
 
                     <div className='flex-1'>
                       <p className='mb-1 max-sm:text-sm'>{course.courseTitle}</p>
-                      <Line strokeWidth={2} percent={progressArray[index] ? (progressArray[index].lectureComplete*100)/progressArray[index].totalLectures :0} className='bg-gray-300 rounded-full'/>
-                      
+                      <Line strokeWidth={2} percent={progressArray[index] ? (progressArray[index].lectureComplete * 100) / progressArray[index].totalLectures : 0} className='bg-gray-300 rounded-full' />
+
                     </div>
                   </td>
 
@@ -78,7 +97,7 @@ const MyEnrollments = () => {
                   </td>
 
                   <td className='px-4 py-3 max-sm:text-right'>
-                    <button onClick={()=>navigate("/players/"+course._id)} className='px-3 sm:px-5 py-1 sm:py-2 bg-blue-700 max-sm:text-xs text-white rounded'>{progressArray[index] && progressArray[index].lectureComplete / progressArray[index].totalLectures ===1 ? "Complete" :"On Going"}</button>
+                    <button onClick={() => navigate("/players/" + course._id)} className='px-3 sm:px-5 py-1 sm:py-2 bg-blue-700 max-sm:text-xs text-white rounded'>{progressArray[index] && progressArray[index].lectureComplete / progressArray[index].totalLectures === 1 ? "Complete" : "On Going"}</button>
                   </td>
 
                 </tr>
@@ -89,7 +108,7 @@ const MyEnrollments = () => {
         </table>
       </div>
 
-      <Footer/>
+      <Footer />
     </>
   )
 }
