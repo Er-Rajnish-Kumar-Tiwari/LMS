@@ -14,7 +14,7 @@ const App = () => {
     <div className='text-default min-h-screen bg-white'>
 
         <Routes>
-          <Route path='/educator' element={<EducatorInfo />}>
+          <Route path='/' element={<EducatorInfo />}>
             <Route path='dashboard' element={<Dashboard />} />
             <Route path='add-course' element={<AddCourse />} />
             <Route path='my-course' element={<MyCourse />} />

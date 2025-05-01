@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import Loading from '../../../Components/Student/Loading/loading';
 
-const BASE_URL = 'https://lms-backend-sgs2.onrender.com'; // You can move this to .env
+const BASE_URL = 'https://lms-backend-sgs2.onrender.com'; 
 
 const Players = () => {
   const {

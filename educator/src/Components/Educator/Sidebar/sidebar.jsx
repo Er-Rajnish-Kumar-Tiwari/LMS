@@ -3,10 +3,10 @@ import { NavLink } from 'react-router-dom';
 
 const Sidebar = () => {
   const menuItems = [
-    { name: "Dashboard", path: "/educator/dashboard", icon: assets.home_icon },
-    { name: "Add Course", path: "/educator/add-course", icon: assets.add_icon },
-    { name: "My Course", path: "/educator/my-course", icon: assets.my_course_icon },
-    { name: "Student Enrolled", path: "/educator/student-enrolled", icon: assets.person_tick_icon },    
+    { name: "Dashboard", path: "/dashboard", icon: assets.home_icon },
+    { name: "Add Course", path: "/add-course", icon: assets.add_icon },
+    { name: "My Course", path: "/my-course", icon: assets.my_course_icon },
+    { name: "Student Enrolled", path: "/student-enrolled", icon: assets.person_tick_icon },    
   ];
 
   return (

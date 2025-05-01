@@ -10,7 +10,7 @@ const Navbar = () => {
         src={assets.logo}
         alt="logo"
         className='w-28 lg:w-32 cursor-pointer'
-        onClick={()=>navigate("/educator")}
+        onClick={()=>navigate("/")}
       />
 
       <div className='flex gap-2 items-center'>
