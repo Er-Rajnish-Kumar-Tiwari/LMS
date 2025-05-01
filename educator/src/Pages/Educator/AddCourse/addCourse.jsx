@@ -101,7 +101,7 @@ const AddCourse = () => {
 
     if (!image) {
       toast.error("Image not selected");
-      return;
+      return; 
     }
 
     try {
