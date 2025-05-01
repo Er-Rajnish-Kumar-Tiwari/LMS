@@ -11,6 +11,7 @@ const MyCourse = () => {
     
     try {
     const response=await axios.get("https://lms-backend-sgs2.onrender.com/getCourse");
+    console.log(response.data);
     setMyCourseData(response.data.courses);
     }
     
@@ -55,7 +56,7 @@ const MyCourse = () => {
 
                     <td className='px-4 py-3'>{((item.coursePrice - item.discount * item.coursePrice / 100) * 85).toFixed(2)}</td>
 
-                    <td className='px-4 py-3'>{item.enrolledStudents && item.enrolledStudents.length}</td>
+                    <td className='px-4 py-3'>{item.enrolledStudent && item.enrolledStudent.length}</td>
 
                     <td className='md:px-4 py-3  '>{new Date(item.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
