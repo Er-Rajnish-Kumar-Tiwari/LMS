@@ -43,7 +43,7 @@ const CourseDetails = () => {
       // Step 1: Request order creation from backend
       const enrollResponse = await axios.post(
         "https://lms-backend-sgs2.onrender.com/payment",
-        { courseId: id }, // Make sure `id` is available in your component
+        { courseId: id },
         {
           headers: {
             token: token,
@@ -174,8 +174,8 @@ const CourseDetails = () => {
               {courseData.courseRatings.length > 1 ? 'ratings' : 'rating'})
             </p>
             <p className='text-gray-600'>
-              {courseData.enrolledStudents.length}{' '}
-              {courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
+              {courseData.enrolledStudents && courseData.enrolledStudents.length}{' '}
+              {courseData.enrolledStudents && courseData.enrolledStudents.length > 1 ? 'students' : 'student'}
             </p>
           </div>
 
