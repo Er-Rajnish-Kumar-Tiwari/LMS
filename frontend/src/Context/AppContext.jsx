@@ -79,7 +79,6 @@ const AppContextProvider=(props)=>{
             );
     
             if (response && response.data) {
-                console.log(response.data.data[0].enrolledStudent[0]._id);
                 setEnrolledCourse(response.data.data);
             } else {
                 toast.error(response.data?.Message || "Failed to fetch enrolled courses");

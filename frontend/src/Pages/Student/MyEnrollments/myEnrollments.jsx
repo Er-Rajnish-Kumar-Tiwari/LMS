@@ -24,6 +24,7 @@ const MyEnrollments = () => {
 
         enrolledCourse.map(async (course) => {
           const response = await axios.post("https://lms-backend-sgs2.onrender.com/get-course-progress", { courseId: course._id }, { headers: { token: token } });
+          console.log(course);
 
           const totalLectures = calculateNOL(course);
           const lectureComplete = response.data.progressData ? response.data.progressData.lectureCompleted.length : 0
@@ -45,12 +46,13 @@ const MyEnrollments = () => {
   useEffect(()=>{
     if(token){
       courseProgress();
+      console.log(enrolledCourse);
     }
   },[token]);
 
   
   useEffect(()=>{
-    if(enrolledCourse.length>0){
+    if(enrolledCourse && enrolledCourse.length>0){
       courseProgress();
     }
   },[enrolledCourse]);
