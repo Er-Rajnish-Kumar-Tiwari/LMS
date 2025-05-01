@@ -101,7 +101,7 @@ const AddCourse = () => {
 
     if (!image) {
       toast.error("Image not selected");
-      return; 
+      return;
     }
 
     try {
@@ -119,7 +119,7 @@ const AddCourse = () => {
 
       const response = await axios.post(
         "https://lms-backend-sgs2.onrender.com/addCourse",
-        formData
+        {courseData:formData}
       );
 
       console.log(response);

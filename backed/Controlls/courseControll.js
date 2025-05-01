@@ -5,9 +5,9 @@ const cloudinary=require("cloudinary").v2;
 const addCourse=async(req,res)=>{
     try {
         const {courseData}=req.body;
-        const imageFile=req.file;
+        const image=req.file;
 
-        if(!imageFile){
+        if(!image){
             return res.json({
                 Status:"404",
                 Massage:"Thumbnail not attached"
@@ -16,7 +16,7 @@ const addCourse=async(req,res)=>{
 
         const parseCourseData=await JSON.parse(courseData);
         const newCourse=await courseModel.create(parseCourseData);
-        const imageUploaded=await cloudinary.uploader.upload(imageFile.path);
+        const imageUploaded=await cloudinary.uploader.upload(image.path);
         newCourse.courseThumbnail=imageUploaded.secure_url;
 
         await newCourse.save();
