@@ -1,12 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { dummyStudentEnrolled } from '../../../assets/assets';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const StudentEnrolled = () => {
 
   const [enrolledStudents, setEnrolledStudents] = useState(null);
 
-  const fetchEnrollStudent = () => {
-    setEnrolledStudents(dummyStudentEnrolled);
+  const fetchEnrollStudent = async() => {
+
+    try {
+    
+      const response=await axios.get("https://lms-backend-sgs2.onrender.com/studentEnrolled");
+      setEnrolledStudents(response.data.dashboardData.enrollStudentData);
+
+    }
+    
+    catch (error) {
+      toast.error(error.Message);
+    }
   };
 
   useEffect(() => {
@@ -40,7 +52,6 @@ const StudentEnrolled = () => {
                     <td className='px-4 py-3 text-center hidden sm:table-cell'>{index + 1}</td>
 
                     <td className='md:px-4 px-2 py-3 flex items-center space-x-3'>
-                      <img src={item.student.imageUrl} alt="image" className='w-9 h-9 rounded-full' />
                       <span className='truncate'>{item.student.name}</span>
                     </td>
 

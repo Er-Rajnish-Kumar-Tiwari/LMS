@@ -119,7 +119,7 @@ const AddCourse = () => {
 
       const response = await axios.post(
         "https://lms-backend-sgs2.onrender.com/addCourse",
-        {courseData:formData}
+        formData
       );
 
       console.log(response);

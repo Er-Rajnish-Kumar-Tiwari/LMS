@@ -1,12 +1,22 @@
 import React, {useEffect, useState } from 'react'
 import { dummyCourses } from '../../../assets/assets';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const MyCourse = () => {
 
   const [myCourseData, setMyCourseData] = useState([]);
 
-  const fetchMyCourse = () => {
-    setMyCourseData(dummyCourses);
+  const fetchMyCourse = async() => {
+    
+    try {
+    const response=await axios.get("https://lms-backend-sgs2.onrender.com/getCourse");
+    setMyCourseData(response.data.courses);
+    }
+    
+    catch (error) {
+      toast.error(error.Message);
+    }
   };
 
   useEffect(() => {
@@ -33,7 +43,7 @@ const MyCourse = () => {
             </thead>
 
             <tbody className='text-sm text-gray-700'>
-              {myCourseData.map((item, index) => {
+              { myCourseData && myCourseData.map((item, index) => {
                 return (
 
                   <tr className='border-b border-gray-500/20' key={index}>
@@ -45,7 +55,7 @@ const MyCourse = () => {
 
                     <td className='px-4 py-3'>{((item.coursePrice - item.discount * item.coursePrice / 100) * 85).toFixed(2)}</td>
 
-                    <td className='px-4 py-3'>{item.enrolledStudents.length}</td>
+                    <td className='px-4 py-3'>{item.enrolledStudents && item.enrolledStudents.length}</td>
 
                     <td className='md:px-4 py-3  '>{new Date(item.createdAt).toLocaleDateString('en-US', {
                       month: 'short',
